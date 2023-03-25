@@ -1,0 +1,19 @@
+.App {
+  text-align: center;
+  width: 600px;
+  margin: 10px auto;
+}
+
+.selectedStyle {
+  background-color: black;
+  color: white;
+  font-family: sans-serif;
+  padding: 0px 20px;
+  border: 1px solid white;
+}
+
+.tabsStyle {
+  border: 1px solid darkgray;
+  font-family: sans-serif;
+  padding: 0px 20px;
+}
