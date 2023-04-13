@@ -1,12 +1,16 @@
-import './App.css';
-import React from 'react';
-import PersonForm from './components/PersonForm';
-
-function App() {
-  return (
-    <div className="App">
-      <PersonForm/>
-    </div>
-  );
+import React, { useState } from 'react';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import Main from './views/Main';
+const App = () => {
+    
+    return (
+	<div>
+    <BrowserRouter>
+            <Routes>
+                <Route element={<Main />} path="/home" default />
+            </Routes>
+    </BrowserRouter>
+        </div>
+    ) 
 }
 export default App;
