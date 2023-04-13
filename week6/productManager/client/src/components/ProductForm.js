@@ -2,9 +2,12 @@ import React, { useState } from 'react'
 import axios from 'axios';
 const ProductForm = (props) => {
     const { products, setProducts } = props;
-    const [title, setTitle] = useState(""); 
+    const [title, setTitle] = useState("");
+    const [ titleError, setTitleError ] = useState("");
     const [price, setPrice] = useState(0.0);
+    const [ priceError, setPriceError ] = useState("");
     const [description, setDescription] = useState("");
+    const [ descError, setDescError ] = useState("")
 
     //handler when the form is submitted
     const onSubmitHandler = (e) => {
@@ -20,8 +23,42 @@ const ProductForm = (props) => {
                 console.log(res);
                 console.log(res.data);
                 setProducts([...products, res.data]);
+                setTitle("");
+                setPrice(0);
+                setDescription("");
             })
             .catch(err=>console.log(err))
+    }
+
+    const titleValidate = (e) => {
+        setTitle(e.target.value)
+        if(e.target.value.length < 1) {
+            setTitleError("Title is required!");
+        } else if(e.target.value.length < 3) {
+            setTitleError("Title must be at least 3 characters long");
+        } else {
+            setTitleError("");
+        }
+    }
+
+    const priceValidate = (e) => {
+        setPrice(e.target.value)
+        if(e.target.value < 0.01) {
+            setPriceError("Price must be greater than 0");
+        } else {
+            setPriceError("");
+        }
+    }
+
+    const descValidate = (e) => {
+        setDescription(e.target.value)
+        if(e.target.value.length < 1) {
+            setDescError("Description is required!");
+        } else if(e.target.value.length < 5) {
+            setDescError("Description must be at least 5 characters long");
+        } else {
+            setDescError("");
+        }
     }
 
     const formStyle = {
@@ -33,6 +70,10 @@ const ProductForm = (props) => {
         color: 'white',
         borderRadius: '5px'
     }
+
+    const error = {
+        color: 'red'
+    }
     
     return (
         <form onSubmit={onSubmitHandler}>
@@ -40,16 +81,31 @@ const ProductForm = (props) => {
             <h2>Product Manager</h2>
             <p style={formStyle}>
                 <label>Title: </label>
-                <input type="text" onChange = {(e)=>setTitle(e.target.value)}/>
+                <input type="text" value={title} onChange = { titleValidate }/>
             </p>
+                {
+                        titleError ?
+                        <p style={ error }>{ titleError }</p> :
+                        ''
+                }
             <p style={formStyle}>
                 <label>Price: </label>
-                <input type="number" step="any" onChange = {(e)=>setPrice(e.target.value)}/>
+                <input type="number" step="any" value={price} onChange = { priceValidate }/>
             </p>
+                {
+                        priceError ?
+                        <p style={ error }>{ priceError }</p> :
+                        ''
+                }
             <p style={formStyle}>
                 <label>Description: </label>
-                <input type="text" onChange = {(e)=>setDescription(e.target.value)}/>
+                <input type="text" value={description} onChange = { descValidate }/>
             </p>
+                {
+                        descError ?
+                        <p style={ error }>{ descError }</p> :
+                        ''
+                }
             <input type="submit" value="Create"/>
             </div>
         </form>
