@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import axios from 'axios';
 const ProductForm = (props) => {
-    const { products, setProducts } = props;
-    const [title, setTitle] = useState("");
+    const { initialTitle, initialPrice, initialDescription, onSubmitProp } = props;
+    const [title, setTitle] = useState(initialTitle);
     const [ titleError, setTitleError ] = useState("");
-    const [price, setPrice] = useState(0.0);
+    const [price, setPrice] = useState(initialPrice);
     const [ priceError, setPriceError ] = useState("");
-    const [description, setDescription] = useState("");
+    const [description, setDescription] = useState(initialDescription);
     const [ descError, setDescError ] = useState("")
 
     //handler when the form is submitted
@@ -14,20 +13,10 @@ const ProductForm = (props) => {
         //prevent default behavior of the submit
         e.preventDefault();
         //make a post request to create a new product
-        axios.post('http://localhost:8000/api/products', {
-            title,
-            price,
-            description
-        })
-            .then(res=>{
-                console.log(res);
-                console.log(res.data);
-                setProducts([...products, res.data]);
-                setTitle("");
-                setPrice(0);
-                setDescription("");
-            })
-            .catch(err=>console.log(err))
+        onSubmitProp({title, price, description});
+        setTitle("");
+        setPrice(0);
+        setDescription("");
     }
 
     const titleValidate = (e) => {
@@ -78,7 +67,6 @@ const ProductForm = (props) => {
     return (
         <form onSubmit={onSubmitHandler}>
             <div style={{ width: "350px", margin: "30px auto"}}>
-            <h2>Product Manager</h2>
             <p style={formStyle}>
                 <label>Title: </label>
                 <input type="text" value={title} onChange = { titleValidate }/>
@@ -106,7 +94,7 @@ const ProductForm = (props) => {
                         <p style={ error }>{ descError }</p> :
                         ''
                 }
-            <input type="submit" value="Create"/>
+            <input type="submit"/>
             </div>
         </form>
     )

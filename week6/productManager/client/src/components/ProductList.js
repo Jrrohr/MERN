@@ -1,27 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios';
+import React from 'react'
 import {Link} from 'react-router-dom';
+import DeleteButton from '../components/DeleteButton';
 const ProductList = (props) => {
-    const { removeFromDom, products, setProducts } = props;
-
-    useEffect(() => {
-        axios.get("http://localhost:8000/api/products")
-            .then((res) => {
-                console.log(res.data);
-                setProducts(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }, [])
-
-    const deleteProduct = (productId) => {
-        axios.delete('http://localhost:8000/api/products/' + productId)
-            .then(res => {
-                removeFromDom(productId)
-            })
-            .catch(err => console.log(err))
-    }
+    const { products, removeFromDom } = props;
 
     const productBox = {
         border: '1px darkgray solid',
@@ -43,7 +24,7 @@ const ProductList = (props) => {
                         <div style={productBox} key={index}>
                             <h4><Link to={`/products/${product._id}`}>{product.title}</Link></h4>
                             <p><Link to={`/products/edit/${product._id}`}>Edit</Link></p>
-                            <p><button onClick={(e)=>{deleteProduct(product._id)}}>Delete</button></p>
+                            <p><DeleteButton productId={product._id} successCallBack={()=>removeFromDom(product._id)} /></p>
                         </div>
                 )})
             }
